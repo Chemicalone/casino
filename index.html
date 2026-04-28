@@ -1381,6 +1381,8 @@ function resetSlot() {
 function playSlot() {
   if (!slotActive) {
     if (!validateBet('slot')) return;
+    // Nascondi risultato precedente (es. "nessuna combinazione")
+    document.getElementById('result-slot').classList.remove('active');
     slotMano = getBet('slot');
     fish -= slotMano;
     updateFish(fish);
@@ -1425,9 +1427,20 @@ function evaluateSlot(results) {
     document.getElementById('slot-mano-display').textContent = `💰 Valore accumulato: ${slotMano} fish`;
     log.innerHTML += `<span class="log-win">▶ ${comboText} → Mano ora: ${slotMano} fish</span><br>`;
   } else {
-    log.innerHTML += `<span class="log-lose">▶ Nessuna combinazione</span><br>`;
+    log.innerHTML += `<span class="log-lose">▶ Nessuna combinazione — mano persa!</span><br>`;
+    // Resetta la sessione: la puntata era già stata scalata, non restituire nulla
+    slotMano = 0;
+    slotActive = false;
     document.getElementById('slot-mano-display').textContent = '';
-    cashOutSlot();
+    document.getElementById('btn-cashout').style.display = 'none';
+    document.getElementById('btn-slot').textContent = '🎰 GIRA';
+    // Mostra risultato negativo
+    const rb = document.getElementById('result-slot');
+    rb.classList.add('active');
+    document.getElementById('rh-slot').className = 'result-header lose';
+    document.getElementById('rh-slot').textContent = 'NESSUNA COMBINAZIONE';
+    document.getElementById('rb-slot').innerHTML = `Mano azzerata. Inserisci una nuova puntata per continuare. Saldo: <span class="result-highlight">${fish} fish</span>`;
+    if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 800);
     return;
   }
   log.scrollTop = log.scrollHeight;
