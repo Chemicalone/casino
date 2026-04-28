@@ -777,35 +777,46 @@
 <!-- SLOT -->
 <div class="modal-overlay" id="modal-slot">
   <div class="modal">
-    <button class="modal-close" onclick="closeGame('slot')" style="float:right;margin-top:-10px">✕</button>
+    <div class="modal-close" onclick="closeGame('slot')" style="float:right;margin-top:-10px">✕</div>
     <div class="modal-title">🎰 Slot Machine</div>
-    <div class="modal-subtitle">PUNTATA MINIMA 10 FISH — CONTINUA FINCHÉ VUOI</div>
-    <div class="bet-section">
-      <label>QUANTE FISH VUOI PUNTARE?</label>
-      <input type="number" class="bet-input" id="bet-slot" min="10" placeholder="10" value="10">
-      <div class="bet-quick">
-        <button onclick="setBet('slot',10)">10</button>
-        <button onclick="setBet('slot',25)">25</button>
-        <button onclick="setBet('slot',50)">50</button>
-        <button onclick="setBet('slot', Math.floor(fish/2))">½</button>
+    <div class="modal-subtitle">PUNTATA MINIMA 10 FISH</div>
+    <div id="slot-game-content">
+      <!-- Sezione puntata iniziale (visibile solo a inizio round) -->
+      <div id="slot-bet-section" class="bet-section">
+        <label>QUANTE FISH VUOI PUNTARE?</label>
+        <input type="number" class="bet-input" id="bet-slot" min="10" placeholder="10" value="10">
+        <div class="bet-quick">
+          <button onclick="setBet('slot',10)">10</button>
+          <button onclick="setBet('slot',25)">25</button>
+          <button onclick="setBet('slot',50)">50</button>
+          <button onclick="setBet('slot', Math.floor(fish/2))">½</button>
+          <button onclick="setBet('slot', fish)">TUTTO</button>
+        </div>
       </div>
-    </div>
-    <div class="slot-machine">
-      <div class="slot-reels">
-        <div class="reel" id="s0">?</div>
-        <div class="reel" id="s1">?</div>
-        <div class="reel" id="s2">?</div>
-        <div class="reel" id="s3">?</div>
-        <div class="reel" id="s4">?</div>
+      <!-- Display mano accumulata (visibile durante il round) -->
+      <div id="slot-mano-display" style="display:none;text-align:center;font-size:1.1rem;color:var(--gold-light);font-weight:700;margin-bottom:12px;padding:10px;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:3px;letter-spacing:1px;">
+        💰 Mano: 0 fish
       </div>
-      <div class="slot-result-text" id="slot-combo-text">Premi GIRA per iniziare</div>
+      <div class="slot-machine">
+        <div class="slot-reels">
+          <div class="reel" id="s0">?</div>
+          <div class="reel" id="s1">?</div>
+          <div class="reel" id="s2">?</div>
+          <div class="reel" id="s3">?</div>
+          <div class="reel" id="s4">?</div>
+        </div>
+        <div class="slot-result-text" id="slot-combo-text">Inserisci la puntata e premi GIRA</div>
+      </div>
+      <button class="action-btn" onclick="playSlot()" id="btn-slot">🎰 GIRA</button>
+      <button class="action-btn secondary" onclick="cashOutSlot()" id="btn-cashout" style="display:none;margin-top:8px">💰 INCASSA LA MANO</button>
     </div>
-    <div id="slot-mano-display" style="font-size:0.75rem;color:var(--gold);text-align:center;margin-bottom:10px;min-height:20px"></div>
-    <button class="action-btn" onclick="playSlot()" id="btn-slot">🎰 GIRA</button>
-    <button class="action-btn secondary" onclick="cashOutSlot()" id="btn-cashout" style="display:none">💰 INCASSA E ESCI</button>
-    <div class="result-box" id="result-slot">
-      <div class="result-header" id="rh-slot"></div>
-      <div class="result-body" id="rb-slot"></div>
+    <div id="slot-result-area" style="display:none;margin-top:10px">
+      <div id="slot-big-result" style="text-align:center;padding:40px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="slot-win-label" style="font-size:3rem;font-weight:900;letter-spacing:4px;margin-bottom:15px"></div>
+        <div id="slot-combo-label" style="font-size:1.2rem;margin-bottom:12px;color:var(--gold-light)"></div>
+        <div id="slot-fish-change" style="font-size:1.5rem;font-weight:700;margin-top:14px"></div>
+      </div>
+      <button class="action-btn secondary" onclick="nuovoRoundSlot()">🎰 NUOVO ROUND</button>
     </div>
     <div class="log" id="slot-log"></div>
   </div>
@@ -1368,30 +1379,53 @@ function playRoulette() {
 
 // ===== SLOT =====
 const slotSymbols = ['7','💎','🔔','🍋','🍇','🍊','🍒','⭐','BAR','?'];
+
 function resetSlot() {
-  slotMano = 0; slotActive = false;
+  // Reset completo: tutto da zero, il giocatore deve reinserire la puntata
+  slotMano = 0;
+  slotActive = false;
   for (let i = 0; i < 5; i++) document.getElementById('s' + i).textContent = '?';
-  document.getElementById('slot-combo-text').textContent = 'Premi GIRA per iniziare';
-  document.getElementById('slot-mano-display').textContent = '';
-  document.getElementById('btn-cashout').style.display = 'none';
+  document.getElementById('slot-combo-text').textContent = 'Inserisci la puntata e premi GIRA';
+  document.getElementById('btn-slot').disabled = false;
   document.getElementById('btn-slot').textContent = '🎰 GIRA';
-  document.getElementById('result-slot').classList.remove('active');
+  document.getElementById('btn-cashout').style.display = 'none';
+  document.getElementById('slot-bet-section').style.display = 'block';
+  document.getElementById('slot-mano-display').style.display = 'none';
+  document.getElementById('slot-mano-display').textContent = '💰 Mano: 0 fish';
+  document.getElementById('slot-game-content').style.display = 'block';
+  document.getElementById('slot-result-area').style.display = 'none';
   document.getElementById('slot-log').innerHTML = '';
 }
+
+function nuovoRoundSlot() {
+  // Dopo un round finito (win o lose): torna alla schermata di gioco
+  // ma richiede nuova puntata (resetSlot gestisce tutto)
+  resetSlot();
+}
+
 function playSlot() {
   if (!slotActive) {
+    // Inizio round: valida e scala la puntata
     if (!validateBet('slot')) return;
-    // Nascondi risultato precedente (es. "nessuna combinazione")
-    document.getElementById('result-slot').classList.remove('active');
     slotMano = getBet('slot');
     fish -= slotMano;
-    updateFish(fish);
+    fish = Math.max(0, fish);
+    document.getElementById('fish-count').textContent = fish;
     slotActive = true;
+    // Nascondi sezione bet, mostra display mano
+    document.getElementById('slot-bet-section').style.display = 'none';
+    document.getElementById('slot-mano-display').style.display = 'block';
+    document.getElementById('slot-mano-display').textContent = `💰 Mano: ${slotMano} fish`;
     document.getElementById('btn-slot').textContent = '🎰 GIRA DI NUOVO';
     document.getElementById('btn-cashout').style.display = 'block';
+    const log = document.getElementById('slot-log');
+    log.innerHTML = `<span class="log-info">▶ Round iniziato — puntata: ${slotMano} fish</span><br>`;
   }
+  document.getElementById('btn-slot').disabled = true;
+  document.getElementById('btn-cashout').disabled = true;
   spinReels();
 }
+
 function spinReels() {
   const reels = [0,1,2,3,4].map(i => document.getElementById('s' + i));
   reels.forEach(r => r.classList.add('spinning'));
@@ -1402,66 +1436,86 @@ function spinReels() {
     evaluateSlot(results);
   }, 600);
 }
+
 function evaluateSlot(results) {
-  // Count pairs
   const counts = {};
   results.forEach(v => counts[v] = (counts[v] || 0) + 1);
   const maxCount = Math.max(...Object.values(counts));
   const pairs = Object.values(counts).filter(c => c >= 2).length;
-  const log = document.getElementById('slot-log');
 
   let mult = 0;
   let comboText = '';
-  if (maxCount === 5) { mult = 10; comboText = '🎆 JACKPOT! Tutti uguali! ×10'; }
-  else if (maxCount === 4) { mult = 6; comboText = '🔥 QUADRUPLA! ×6'; }
-  else if (maxCount === 3 && pairs >= 2) { mult = 5; comboText = '✨ FULL! ×5'; }
-  else if (maxCount === 3) { mult = 4; comboText = '⭐ TRIPLA! ×4'; }
-  else if (maxCount === 2 && pairs >= 2) { mult = 3; comboText = '💫 DOPPIA COPPIA! ×3'; }
-  else if (maxCount === 2) { mult = 2; comboText = '✅ COPPIA! ×2'; }
-  else { mult = 0; comboText = '❌ Nessuna combinazione'; }
+  if      (maxCount === 5)                    { mult = 10; comboText = '🎰 JACKPOT! Tutti uguali! ×10'; }
+  else if (maxCount === 4)                    { mult = 6;  comboText = '🔥 QUADRUPLA! ×6'; }
+  else if (maxCount === 3 && pairs >= 2)      { mult = 5;  comboText = '💎 FULL! ×5'; }
+  else if (maxCount === 3)                    { mult = 4;  comboText = '⭐ TRIPLA! ×4'; }
+  else if (maxCount === 2 && pairs >= 2)      { mult = 3;  comboText = '🍒 DOPPIA COPPIA! ×3'; }
+  else if (maxCount === 2)                    { mult = 2;  comboText = '🍋 COPPIA! ×2'; }
+  else                                        { mult = 0;  comboText = '❌ Nessuna combinazione'; }
 
   document.getElementById('slot-combo-text').textContent = comboText;
 
   if (mult > 0) {
+    // Combo! Moltiplica la mano e continua il round
     slotMano = slotMano * mult;
-    document.getElementById('slot-mano-display').textContent = `💰 Valore accumulato: ${slotMano} fish`;
-    log.innerHTML += `<span class="log-win">▶ ${comboText} → Mano ora: ${slotMano} fish</span><br>`;
+    document.getElementById('slot-mano-display').textContent = `💰 Mano accumulata: ${slotMano} fish`;
+    document.getElementById('btn-slot').disabled = false;
+    document.getElementById('btn-cashout').disabled = false;
+    const log = document.getElementById('slot-log');
+    log.innerHTML += `<span class="log-win">▶ ${comboText} → Mano: ${slotMano} fish</span><br>`;
+    log.scrollTop = log.scrollHeight;
   } else {
-    log.innerHTML += `<span class="log-lose">▶ Nessuna combinazione — mano persa!</span><br>`;
-    // Resetta la sessione: la puntata era già stata scalata, non restituire nulla
-    slotMano = 0;
-    slotActive = false;
-    document.getElementById('slot-mano-display').textContent = '';
-    document.getElementById('btn-cashout').style.display = 'none';
-    document.getElementById('btn-slot').textContent = '🎰 GIRA';
-    // Mostra risultato negativo
-    const rb = document.getElementById('result-slot');
-    rb.classList.add('active');
-    document.getElementById('rh-slot').className = 'result-header lose';
-    document.getElementById('rh-slot').textContent = 'NESSUNA COMBINAZIONE';
-    document.getElementById('rb-slot').innerHTML = `Mano azzerata. Inserisci una nuova puntata per continuare. Saldo: <span class="result-highlight">${fish} fish</span>`;
-    if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 800);
-    return;
+    // Nessuna combo — il round finisce, perdi tutta la mano
+    endSlot(false);
   }
-  log.scrollTop = log.scrollHeight;
 }
+
 function cashOutSlot() {
   if (!slotActive) return;
-  updateFish(fish + slotMano, slotMano > 0);
-  const rb = document.getElementById('result-slot');
-  rb.classList.add('active');
-  const rh = document.getElementById('rh-slot');
-  const rbody = document.getElementById('rb-slot');
-  if (slotMano > 0) {
-    rh.className = 'result-header win'; rh.textContent = '💰 INCASSATO!';
-    rbody.innerHTML = `Hai incassato <span class="result-highlight">${slotMano} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`;
-  } else {
-    rh.className = 'result-header lose'; rh.textContent = '💸 Hai perso tutto';
-    rbody.innerHTML = `Saldo: <span class="result-highlight">${fish} fish</span>`;
-  }
+  endSlot(true);
+}
+
+function endSlot(won) {
   slotActive = false;
   document.getElementById('btn-cashout').style.display = 'none';
-  document.getElementById('btn-slot').textContent = '🎰 GIRA';
+  document.getElementById('btn-slot').disabled = false;
+
+  const bigResult = document.getElementById('slot-big-result');
+  const winLabel = document.getElementById('slot-win-label');
+  const comboLabel = document.getElementById('slot-combo-label');
+  const fishChange = document.getElementById('slot-fish-change');
+
+  if (won) {
+    const guadagno = slotMano;
+    updateFish(fish + guadagno, true);
+    bigResult.style.background = 'rgba(0,80,30,0.5)';
+    bigResult.style.border = '2px solid #4eff91';
+    winLabel.textContent = 'HAI VINTO';
+    winLabel.style.color = '#4eff91';
+    comboLabel.textContent = `Guadagno: +${guadagno} fish`;
+    fishChange.textContent = `Saldo: ${fish} fish`;
+    fishChange.style.color = '#4eff91';
+    const log = document.getElementById('slot-log');
+    log.innerHTML += `<span class="log-win">💰 INCASSATO: +${guadagno} fish</span><br>`;
+    log.scrollTop = log.scrollHeight;
+  } else {
+    // La mano è già persa (era stata scalata all'inizio del round)
+    bigResult.style.background = 'rgba(80,0,0,0.5)';
+    bigResult.style.border = '2px solid #ff4e4e';
+    winLabel.textContent = 'HAI PERSO';
+    winLabel.style.color = '#ff6b6b';
+    comboLabel.textContent = 'Nessuna combinazione — mano persa';
+    fishChange.textContent = `Saldo: ${fish} fish`;
+    fishChange.style.color = '#ff6b6b';
+    updateFish(fish, false);
+    if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
+  }
+
+  // Azzera slotMano a fine round
+  slotMano = 0;
+
+  document.getElementById('slot-game-content').style.display = 'none';
+  document.getElementById('slot-result-area').style.display = 'block';
 }
 
 // ===== CAVALLI =====
