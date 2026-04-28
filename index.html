@@ -649,10 +649,17 @@
       </button>
     </div>
     <div class="coin-container"><div class="coin" id="coin-visual">🪙</div></div>
-    <button class="action-btn" onclick="playMoneta()" id="btn-moneta">LANCIA LA MONETA</button>
-    <div class="result-box" id="result-moneta">
-      <div class="result-header" id="rh-moneta"></div>
-      <div class="result-body" id="rb-moneta"></div>
+    <div id="moneta-play-area">
+      <button class="action-btn" onclick="playMoneta()" id="btn-moneta">LANCIA LA MONETA</button>
+    </div>
+    <div id="moneta-result-area" style="display:none;margin-top:10px">
+      <div id="moneta-big-result" style="text-align:center;padding:30px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="moneta-win-label" style="font-size:2.5rem;font-weight:900;letter-spacing:3px;margin-bottom:10px"></div>
+        <div id="moneta-symbol-out" style="font-size:4rem;font-weight:900;margin-bottom:8px"></div>
+        <div id="moneta-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8;color:var(--text-dim)"></div>
+        <div id="moneta-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
+      </div>
+      <button class="action-btn secondary" onclick="resetMoneta()">GIOCA ANCORA</button>
     </div>
   </div>
 </div>
@@ -699,10 +706,17 @@
     <div class="dice-display">
       <div class="die" id="die1">⚀</div>
     </div>
-    <button class="action-btn" onclick="playDadi()">LANCIA IL DADO</button>
-    <div class="result-box" id="result-dadi">
-      <div class="result-header" id="rh-dadi"></div>
-      <div class="result-body" id="rb-dadi"></div>
+    <div id="dadi-play-area">
+      <button class="action-btn" onclick="playDadi()">LANCIA IL DADO</button>
+    </div>
+    <div id="dadi-result-area" style="display:none;margin-top:10px">
+      <div id="dadi-big-result" style="text-align:center;padding:30px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="dadi-win-label" style="font-size:2.5rem;font-weight:900;letter-spacing:3px;margin-bottom:10px"></div>
+        <div id="dadi-symbol-out" style="font-size:4rem;font-weight:900;margin-bottom:8px"></div>
+        <div id="dadi-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8;color:var(--text-dim)"></div>
+        <div id="dadi-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
+      </div>
+      <button class="action-btn secondary" onclick="resetDadi()">GIOCA ANCORA</button>
     </div>
   </div>
 </div>
@@ -755,7 +769,7 @@
         <div id="r-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8"></div>
         <div id="r-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
       </div>
-      <button class="action-btn secondary" onclick="resetRoulette()">🎡 GIOCA ANCORA</button>
+      <button class="action-btn secondary" onclick="resetRoulette()">GIOCA ANCORA</button>
     </div>
   </div>
 </div>
@@ -840,10 +854,17 @@
         <div class="horse-pos" id="pos3">0</div>
       </div>
     </div>
-    <button class="action-btn" onclick="playCavalli()" id="btn-cavalli">🏁 INIZIA LA CORSA</button>
-    <div class="result-box" id="result-cavalli">
-      <div class="result-header" id="rh-cavalli"></div>
-      <div class="result-body" id="rb-cavalli"></div>
+    <div id="cavalli-play-area">
+      <button class="action-btn" onclick="playCavalli()" id="btn-cavalli">INIZIA LA CORSA</button>
+    </div>
+    <div id="cavalli-result-area" style="display:none;margin-top:10px">
+      <div id="cavalli-big-result" style="text-align:center;padding:30px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="cavalli-win-label" style="font-size:2.5rem;font-weight:900;letter-spacing:3px;margin-bottom:10px"></div>
+        <div id="cavalli-symbol-out" style="font-size:3rem;font-weight:900;margin-bottom:8px"></div>
+        <div id="cavalli-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8;color:var(--text-dim)"></div>
+        <div id="cavalli-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
+      </div>
+      <button class="action-btn secondary" onclick="resetRace()">GIOCA ANCORA</button>
     </div>
   </div>
 </div>
@@ -1057,11 +1078,16 @@ function showToast(msg) {
 function openGame(name) {
   if (fish < 10) { document.getElementById('game-over').classList.add('active'); return; }
   document.getElementById('modal-' + name).classList.add('active');
-  // reset results
+  // reset old-style result boxes (slot, bj)
   ['result-'+name, 'rh-'+name, 'rb-'+name].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.className = el.className.replace(' active',''); el.textContent = ''; }
   });
+  // reset new-style big result areas
+  const playArea = document.getElementById(name + '-play-area');
+  const resultArea = document.getElementById(name + '-result-area');
+  if (playArea) playArea.style.display = 'block';
+  if (resultArea) resultArea.style.display = 'none';
   if (name === 'slot') resetSlot();
   if (name === 'blackjack') resetBJ();
   if (name === 'roulette') { buildRouletteGrid(); resetRoulette(); }
@@ -1093,7 +1119,7 @@ function showResult(game, won, header, body) {
   const rbody = document.getElementById('rb-' + game);
   rb.classList.add('active');
   rh.className = 'result-header ' + (won === true ? 'win' : won === false ? 'lose' : 'neutral');
-  rh.textContent = won === true ? '🎉 HAI VINTO!' : won === false ? '😔 HAI PERSO' : '🎲 ' + header;
+  rh.textContent = won === true ? 'HAI VINTO' : won === false ? 'HAI PERSO' : header;
   rbody.innerHTML = body;
 }
 
@@ -1102,6 +1128,11 @@ function selectMoneta(choice) {
   monetaChoice = choice;
   document.getElementById('moneta-testa').classList.toggle('selected', choice === 0);
   document.getElementById('moneta-croce').classList.toggle('selected', choice === 1);
+}
+function resetMoneta() {
+  document.getElementById('moneta-play-area').style.display = 'block';
+  document.getElementById('moneta-result-area').style.display = 'none';
+  document.getElementById('coin-visual').textContent = '🪙';
 }
 function playMoneta() {
   if (monetaChoice === -1) { showToast('Scegli testa o croce!'); return; }
@@ -1115,17 +1146,31 @@ function playMoneta() {
   setTimeout(() => coin.classList.remove('flip'), 900);
   coin.textContent = icons[result];
   setTimeout(() => {
-    if (result === monetaChoice) {
+    const won = result === monetaChoice;
+    const colorBg = won ? 'rgba(0,80,30,0.5)' : 'rgba(80,0,0,0.5)';
+    const bigResult = document.getElementById('moneta-big-result');
+    bigResult.style.background = colorBg;
+    bigResult.style.border = won ? '2px solid #4eff91' : '2px solid #ff4e4e';
+    const winLabel = document.getElementById('moneta-win-label');
+    winLabel.textContent = won ? 'HAI VINTO' : 'HAI PERSO';
+    winLabel.style.color = won ? '#4eff91' : '#ff6b6b';
+    document.getElementById('moneta-symbol-out').textContent = icons[result] + ' ' + names[result].toUpperCase();
+    document.getElementById('moneta-detail').innerHTML = `Hai puntato su: <span style="color:var(--gold-light)">${names[monetaChoice].toUpperCase()}</span>`;
+    const fishChange = document.getElementById('moneta-fish-change');
+    if (won) {
       updateFish(fish + bet, true);
-      showResult('moneta', true, '', `È uscito <span class="result-highlight">${names[result]}</span>! Vinci <span class="result-highlight">+${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+      fishChange.textContent = `+${bet} fish  →  Saldo: ${fish} fish`;
+      fishChange.style.color = '#4eff91';
     } else {
-      fish -= bet;
-      fish = Math.max(0, fish);
+      fish -= bet; fish = Math.max(0, fish);
       document.getElementById('fish-count').textContent = fish;
       document.getElementById('fish-count').className = 'lose';
-      showResult('moneta', false, '', `È uscito <span class="result-highlight">${names[result]}</span>. Perdi <span class="result-highlight">${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+      fishChange.textContent = `-${bet} fish  →  Saldo: ${fish} fish`;
+      fishChange.style.color = '#ff6b6b';
       if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
     }
+    document.getElementById('moneta-play-area').style.display = 'none';
+    document.getElementById('moneta-result-area').style.display = 'block';
   }, 900);
 }
 
@@ -1141,6 +1186,11 @@ function selectDadi(choice) {
 function selectDadiNum(n) {
   dadiNumber = n;
   for (let i = 1; i <= 6; i++) document.getElementById('dn' + i).classList.toggle('selected', i === n);
+}
+function resetDadi() {
+  document.getElementById('dadi-play-area').style.display = 'block';
+  document.getElementById('dadi-result-area').style.display = 'none';
+  document.getElementById('die1').textContent = '⚀';
 }
 function playDadi() {
   if (dadiChoice === -1) { showToast('Scegli una puntata!'); return; }
@@ -1162,18 +1212,31 @@ function playDadi() {
       case 4: won = roll === dadiNumber; mult = 5; break;
     }
     const labels = ['pari','dispari','maggiore di 3','minore di 3','numero ' + dadiNumber];
+    const colorBg = won ? 'rgba(0,80,30,0.5)' : 'rgba(80,0,0,0.5)';
+    const bigResult = document.getElementById('dadi-big-result');
+    bigResult.style.background = colorBg;
+    bigResult.style.border = won ? '2px solid #4eff91' : '2px solid #ff4e4e';
+    const winLabel = document.getElementById('dadi-win-label');
+    winLabel.textContent = won ? 'HAI VINTO' : 'HAI PERSO';
+    winLabel.style.color = won ? '#4eff91' : '#ff6b6b';
+    document.getElementById('dadi-symbol-out').textContent = diceIcons[roll] + ' ' + roll;
+    document.getElementById('dadi-detail').innerHTML = `Puntavi su: <span style="color:var(--gold-light)">${labels[dadiChoice].toUpperCase()}</span>`;
+    const fishChange = document.getElementById('dadi-fish-change');
     if (won) {
       const gain = bet * (mult - 1);
       updateFish(fish + gain, true);
-      showResult('dadi', true, '', `È uscito <span class="result-highlight">${roll}</span> — hai puntato su <b>${labels[dadiChoice]}</b>!<br>Vinci <span class="result-highlight">+${gain} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+      fishChange.textContent = `+${gain} fish  →  Saldo: ${fish} fish`;
+      fishChange.style.color = '#4eff91';
     } else {
-      fish -= bet;
-      fish = Math.max(0, fish);
+      fish -= bet; fish = Math.max(0, fish);
       document.getElementById('fish-count').textContent = fish;
       document.getElementById('fish-count').className = 'lose';
-      showResult('dadi', false, '', `È uscito <span class="result-highlight">${roll}</span> — hai puntato su <b>${labels[dadiChoice]}</b>.<br>Perdi <span class="result-highlight">${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+      fishChange.textContent = `-${bet} fish  →  Saldo: ${fish} fish`;
+      fishChange.style.color = '#ff6b6b';
       if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
     }
+    document.getElementById('dadi-play-area').style.display = 'none';
+    document.getElementById('dadi-result-area').style.display = 'block';
   }, 700);
 }
 
@@ -1258,7 +1321,7 @@ function playRoulette() {
       bigResult.style.border = won ? '2px solid #4eff91' : '2px solid #ff4e4e';
 
       const winLabel = document.getElementById('r-win-label');
-      winLabel.textContent = won ? '🎉 HAI VINTO!' : '😔 HAI PERSO';
+      winLabel.textContent = won ? 'HAI VINTO' : 'HAI PERSO';
       winLabel.style.color = won ? '#4eff91' : '#ff6b6b';
 
       const numOut = document.getElementById('r-number-out');
@@ -1386,9 +1449,10 @@ let raceInterval = null;
 function resetRace() {
   cavalloChoice = -1; cavalloVersione = -1;
   [1,2,3].forEach(i => { document.getElementById('hp'+i).style.width='0%'; document.getElementById('pos'+i).textContent='0'; });
-  document.getElementById('result-cavalli').classList.remove('active');
   [1,2,3].forEach(i => document.getElementById('c-'+i).classList.remove('selected'));
   [1,2].forEach(i => document.getElementById('cv-'+i).classList.remove('selected'));
+  document.getElementById('cavalli-play-area').style.display = 'block';
+  document.getElementById('cavalli-result-area').style.display = 'none';
 }
 function selectCavallo(n) {
   cavalloChoice = n;
@@ -1403,7 +1467,6 @@ function playCavalli() {
   if (cavalloVersione === -1) { showToast('Scegli versione lunga o breve!'); return; }
   if (!validateBet('cavalli')) return;
   const bet = getBet('cavalli');
-  // Sottrai la puntata senza triggerare il game over (la puntata è in gioco)
   fish -= bet;
   document.getElementById('fish-count').textContent = fish;
   const limite = cavalloVersione === 1 ? 100 : 30;
@@ -1425,15 +1488,31 @@ function playCavalli() {
       clearInterval(raceInterval);
       document.getElementById('btn-cavalli').disabled = false;
       const mult = cavalloVersione === 1 ? 5 : 3;
-      if (winner === cavalloChoice) {
+      const won = winner === cavalloChoice;
+      const horseNames = ['', 'Cavallo 1', 'Cavallo 2', 'Cavallo 3'];
+      const colorBg = won ? 'rgba(0,80,30,0.5)' : 'rgba(80,0,0,0.5)';
+      const bigResult = document.getElementById('cavalli-big-result');
+      bigResult.style.background = colorBg;
+      bigResult.style.border = won ? '2px solid #4eff91' : '2px solid #ff4e4e';
+      const winLabel = document.getElementById('cavalli-win-label');
+      winLabel.textContent = won ? 'HAI VINTO' : 'HAI PERSO';
+      winLabel.style.color = won ? '#4eff91' : '#ff6b6b';
+      document.getElementById('cavalli-symbol-out').textContent = horseNames[winner].toUpperCase();
+      const fishChange = document.getElementById('cavalli-fish-change');
+      if (won) {
         const gain = bet * (mult - 1);
         updateFish(fish + gain, true);
-        showResult('cavalli', true, '', `🏆 Vince il <span class="result-highlight">Cavallo ${winner}</span>! Hai puntato sul vincitore!<br>Guadagno: <span class="result-highlight">+${gain} fish</span> (×${mult}). Saldo: <span class="result-highlight">${fish} fish</span>`);
+        document.getElementById('cavalli-detail').innerHTML = `Hai puntato su ${horseNames[cavalloChoice].toUpperCase()} — <span style="color:var(--gold-light)">vincitore!</span>  ×${mult}`;
+        fishChange.textContent = `+${gain} fish  →  Saldo: ${fish} fish`;
+        fishChange.style.color = '#4eff91';
       } else {
-        // fish già scalato prima della gara; ora controlliamo il game over con delay
         updateFish(fish, false);
-        showResult('cavalli', false, '', `🏁 Vince il <span class="result-highlight">Cavallo ${winner}</span>. Tu avevi scelto il Cavallo ${cavalloChoice}.<br>Perdi <span class="result-highlight">${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+        document.getElementById('cavalli-detail').innerHTML = `Hai puntato su ${horseNames[cavalloChoice].toUpperCase()}`;
+        fishChange.textContent = `-${bet} fish  →  Saldo: ${fish} fish`;
+        fishChange.style.color = '#ff6b6b';
       }
+      document.getElementById('cavalli-play-area').style.display = 'none';
+      document.getElementById('cavalli-result-area').style.display = 'block';
     }
   }, 300);
 }
@@ -1444,6 +1523,8 @@ function resetBJ() {
   document.getElementById('bj-bet-area').style.display = 'block';
   document.getElementById('bj-game-area').style.display = 'none';
   document.getElementById('result-bj').classList.remove('active');
+  document.getElementById('rh-bj').textContent = '';
+  document.getElementById('rb-bj').innerHTML = '';
   document.getElementById('bj-log').innerHTML = '';
   document.getElementById('dealer-cards').innerHTML = '';
   document.getElementById('player-cards').innerHTML = '';
