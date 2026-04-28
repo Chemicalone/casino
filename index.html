@@ -965,6 +965,27 @@ function toggleMusic() {
   }
 }
 
+// Autoplay musica all'avvio (con fallback al click utente se il browser blocca l'autoplay)
+document.addEventListener('DOMContentLoaded', () => {
+  const audio = document.getElementById('bg-music');
+  const btn = document.getElementById('music-btn');
+  const status = document.getElementById('audio-status');
+  audio.play().then(() => {
+    btn.textContent = '⏸ PAUSA MUSIC';
+    status.textContent = '♪ IN RIPRODUZIONE';
+  }).catch(() => {
+    // Il browser ha bloccato l'autoplay: aspetta il primo click dell'utente
+    const startOnInteraction = () => {
+      audio.play().then(() => {
+        btn.textContent = '⏸ PAUSA MUSIC';
+        status.textContent = '♪ IN RIPRODUZIONE';
+      }).catch(() => {});
+      document.removeEventListener('click', startOnInteraction);
+    };
+    document.addEventListener('click', startOnInteraction);
+  });
+});
+
 // ===== FISH =====
 function updateFish(newVal, won) {
   const el = document.getElementById('fish-count');
@@ -1098,8 +1119,12 @@ function playMoneta() {
       updateFish(fish + bet, true);
       showResult('moneta', true, '', `È uscito <span class="result-highlight">${names[result]}</span>! Vinci <span class="result-highlight">+${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
     } else {
-      updateFish(fish - bet, false);
+      fish -= bet;
+      fish = Math.max(0, fish);
+      document.getElementById('fish-count').textContent = fish;
+      document.getElementById('fish-count').className = 'lose';
       showResult('moneta', false, '', `È uscito <span class="result-highlight">${names[result]}</span>. Perdi <span class="result-highlight">${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+      if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
     }
   }, 900);
 }
@@ -1142,8 +1167,12 @@ function playDadi() {
       updateFish(fish + gain, true);
       showResult('dadi', true, '', `È uscito <span class="result-highlight">${roll}</span> — hai puntato su <b>${labels[dadiChoice]}</b>!<br>Vinci <span class="result-highlight">+${gain} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
     } else {
-      updateFish(fish - bet, false);
+      fish -= bet;
+      fish = Math.max(0, fish);
+      document.getElementById('fish-count').textContent = fish;
+      document.getElementById('fish-count').className = 'lose';
       showResult('dadi', false, '', `È uscito <span class="result-highlight">${roll}</span> — hai puntato su <b>${labels[dadiChoice]}</b>.<br>Perdi <span class="result-highlight">${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
+      if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
     }
   }, 700);
 }
@@ -1248,9 +1277,13 @@ function playRoulette() {
         fishChange.textContent = `+${gain} fish  →  Saldo: ${fish} fish`;
         fishChange.style.color = '#4eff91';
       } else {
-        updateFish(fish - bet, false);
+        fish -= bet;
+        fish = Math.max(0, fish);
+        document.getElementById('fish-count').textContent = fish;
+        document.getElementById('fish-count').className = 'lose';
         fishChange.textContent = `-${bet} fish  →  Saldo: ${fish} fish`;
         fishChange.style.color = '#ff6b6b';
+        if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
       }
 
       document.getElementById('roulette-result-area').style.display = 'block';
@@ -1370,7 +1403,9 @@ function playCavalli() {
   if (cavalloVersione === -1) { showToast('Scegli versione lunga o breve!'); return; }
   if (!validateBet('cavalli')) return;
   const bet = getBet('cavalli');
-  fish -= bet; updateFish(fish);
+  // Sottrai la puntata senza triggerare il game over (la puntata è in gioco)
+  fish -= bet;
+  document.getElementById('fish-count').textContent = fish;
   const limite = cavalloVersione === 1 ? 100 : 30;
   let c = [0,0,0];
   let winner = 0;
@@ -1395,6 +1430,8 @@ function playCavalli() {
         updateFish(fish + gain, true);
         showResult('cavalli', true, '', `🏆 Vince il <span class="result-highlight">Cavallo ${winner}</span>! Hai puntato sul vincitore!<br>Guadagno: <span class="result-highlight">+${gain} fish</span> (×${mult}). Saldo: <span class="result-highlight">${fish} fish</span>`);
       } else {
+        // fish già scalato prima della gara; ora controlliamo il game over con delay
+        updateFish(fish, false);
         showResult('cavalli', false, '', `🏁 Vince il <span class="result-highlight">Cavallo ${winner}</span>. Tu avevi scelto il Cavallo ${cavalloChoice}.<br>Perdi <span class="result-highlight">${bet} fish</span>. Saldo: <span class="result-highlight">${fish} fish</span>`);
       }
     }
