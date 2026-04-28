@@ -628,36 +628,36 @@
     <button class="modal-close" onclick="closeGame('moneta')" style="float:right;margin-top:-10px">✕</button>
     <div class="modal-title">🪙 Testa o Croce</div>
     <div class="modal-subtitle">PUNTATA MINIMA 10 FISH</div>
-    <div class="bet-section">
-      <label>QUANTE FISH VUOI PUNTARE?</label>
-      <input type="number" class="bet-input" id="bet-moneta" min="10" placeholder="10" value="10">
-      <div class="bet-quick">
-        <button onclick="setBet('moneta',10)">10</button>
-        <button onclick="setBet('moneta',25)">25</button>
-        <button onclick="setBet('moneta',50)">50</button>
-        <button onclick="setBet('moneta',100)">100</button>
-        <button onclick="setBet('moneta', Math.floor(fish/2))">½</button>
-        <button onclick="setBet('moneta', fish)">TUTTO</button>
+    <div id="moneta-game-content">
+      <div class="bet-section">
+        <label>QUANTE FISH VUOI PUNTARE?</label>
+        <input type="number" class="bet-input" id="bet-moneta" min="10" placeholder="10" value="10">
+        <div class="bet-quick">
+          <button onclick="setBet('moneta',10)">10</button>
+          <button onclick="setBet('moneta',25)">25</button>
+          <button onclick="setBet('moneta',50)">50</button>
+          <button onclick="setBet('moneta',100)">100</button>
+          <button onclick="setBet('moneta', Math.floor(fish/2))">½</button>
+          <button onclick="setBet('moneta', fish)">TUTTO</button>
+        </div>
       </div>
-    </div>
-    <div class="options-grid" style="grid-template-columns:1fr 1fr">
-      <button class="option-btn" id="moneta-testa" onclick="selectMoneta(0)">
-        👑 TESTA <span class="option-mult">×2</span>
-      </button>
-      <button class="option-btn" id="moneta-croce" onclick="selectMoneta(1)">
-        ⚔️ CROCE <span class="option-mult">×2</span>
-      </button>
-    </div>
-    <div class="coin-container"><div class="coin" id="coin-visual">🪙</div></div>
-    <div id="moneta-play-area">
+      <div class="options-grid" style="grid-template-columns:1fr 1fr">
+        <button class="option-btn" id="moneta-testa" onclick="selectMoneta(0)">
+          👑 TESTA <span class="option-mult">×2</span>
+        </button>
+        <button class="option-btn" id="moneta-croce" onclick="selectMoneta(1)">
+          ⚔️ CROCE <span class="option-mult">×2</span>
+        </button>
+      </div>
+      <div class="coin-container"><div class="coin" id="coin-visual">🪙</div></div>
       <button class="action-btn" onclick="playMoneta()" id="btn-moneta">LANCIA LA MONETA</button>
     </div>
     <div id="moneta-result-area" style="display:none;margin-top:10px">
-      <div id="moneta-big-result" style="text-align:center;padding:30px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
-        <div id="moneta-win-label" style="font-size:2.5rem;font-weight:900;letter-spacing:3px;margin-bottom:10px"></div>
-        <div id="moneta-symbol-out" style="font-size:4rem;font-weight:900;margin-bottom:8px"></div>
+      <div id="moneta-big-result" style="text-align:center;padding:40px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="moneta-win-label" style="font-size:3rem;font-weight:900;letter-spacing:4px;margin-bottom:15px"></div>
+        <div id="moneta-symbol-out" style="font-size:5rem;font-weight:900;margin-bottom:12px"></div>
         <div id="moneta-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8;color:var(--text-dim)"></div>
-        <div id="moneta-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
+        <div id="moneta-fish-change" style="font-size:1.5rem;font-weight:700;margin-top:14px"></div>
       </div>
       <button class="action-btn secondary" onclick="resetMoneta()">GIOCA ANCORA</button>
     </div>
@@ -670,51 +670,51 @@
     <button class="modal-close" onclick="closeGame('dadi')" style="float:right;margin-top:-10px">✕</button>
     <div class="modal-title">🎲 Dadi</div>
     <div class="modal-subtitle">PUNTATA MINIMA 10 FISH</div>
-    <div class="bet-section">
-      <label>QUANTE FISH VUOI PUNTARE?</label>
-      <input type="number" class="bet-input" id="bet-dadi" min="10" placeholder="10" value="10">
-      <div class="bet-quick">
-        <button onclick="setBet('dadi',10)">10</button>
-        <button onclick="setBet('dadi',25)">25</button>
-        <button onclick="setBet('dadi',50)">50</button>
-        <button onclick="setBet('dadi', Math.floor(fish/2))">½</button>
-        <button onclick="setBet('dadi', fish)">TUTTO</button>
+    <div id="dadi-game-content">
+      <div class="bet-section">
+        <label>QUANTE FISH VUOI PUNTARE?</label>
+        <input type="number" class="bet-input" id="bet-dadi" min="10" placeholder="10" value="10">
+        <div class="bet-quick">
+          <button onclick="setBet('dadi',10)">10</button>
+          <button onclick="setBet('dadi',25)">25</button>
+          <button onclick="setBet('dadi',50)">50</button>
+          <button onclick="setBet('dadi', Math.floor(fish/2))">½</button>
+          <button onclick="setBet('dadi', fish)">TUTTO</button>
+        </div>
       </div>
-    </div>
-    <div class="options-grid" style="grid-template-columns:1fr 1fr">
-      <button class="option-btn" onclick="selectDadi(0)" id="dadi-0">PARI <span class="option-mult">×2</span></button>
-      <button class="option-btn" onclick="selectDadi(1)" id="dadi-1">DISPARI <span class="option-mult">×2</span></button>
-      <button class="option-btn" onclick="selectDadi(2)" id="dadi-2">MAGGIORE DI 3 <span class="option-mult">×2</span></button>
-      <button class="option-btn" onclick="selectDadi(3)" id="dadi-3">MINORE DI 3 <span class="option-mult">×2</span></button>
-    </div>
-    <div style="margin-bottom:12px">
-      <button class="option-btn" onclick="selectDadi(4)" id="dadi-4" style="width:100%">
-        NUMERO SINGOLO (scegli dopo) <span class="option-mult">×5</span>
-      </button>
-    </div>
-    <div id="dadi-number-pick" style="display:none;margin-bottom:12px">
-      <div style="font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;margin-bottom:8px">SCEGLI UN NUMERO (1-6):</div>
-      <div style="display:flex;gap:8px">
-        <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(1)" id="dn1">1</button>
-        <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(2)" id="dn2">2</button>
-        <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(3)" id="dn3">3</button>
-        <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(4)" id="dn4">4</button>
-        <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(5)" id="dn5">5</button>
-        <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(6)" id="dn6">6</button>
+      <div class="options-grid" style="grid-template-columns:1fr 1fr">
+        <button class="option-btn" onclick="selectDadi(0)" id="dadi-0">PARI <span class="option-mult">×2</span></button>
+        <button class="option-btn" onclick="selectDadi(1)" id="dadi-1">DISPARI <span class="option-mult">×2</span></button>
+        <button class="option-btn" onclick="selectDadi(2)" id="dadi-2">MAGGIORE DI 3 <span class="option-mult">×2</span></button>
+        <button class="option-btn" onclick="selectDadi(3)" id="dadi-3">MINORE DI 3 <span class="option-mult">×2</span></button>
       </div>
-    </div>
-    <div class="dice-display">
-      <div class="die" id="die1">⚀</div>
-    </div>
-    <div id="dadi-play-area">
+      <div style="margin-bottom:12px">
+        <button class="option-btn" onclick="selectDadi(4)" id="dadi-4" style="width:100%">
+          NUMERO SINGOLO (scegli dopo) <span class="option-mult">×5</span>
+        </button>
+      </div>
+      <div id="dadi-number-pick" style="display:none;margin-bottom:12px">
+        <div style="font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;margin-bottom:8px">SCEGLI UN NUMERO (1-6):</div>
+        <div style="display:flex;gap:8px">
+          <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(1)" id="dn1">1</button>
+          <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(2)" id="dn2">2</button>
+          <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(3)" id="dn3">3</button>
+          <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(4)" id="dn4">4</button>
+          <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(5)" id="dn5">5</button>
+          <button class="num-btn black-num" style="width:40px;height:40px" onclick="selectDadiNum(6)" id="dn6">6</button>
+        </div>
+      </div>
+      <div class="dice-display">
+        <div class="die" id="die1">⚀</div>
+      </div>
       <button class="action-btn" onclick="playDadi()">LANCIA IL DADO</button>
     </div>
     <div id="dadi-result-area" style="display:none;margin-top:10px">
-      <div id="dadi-big-result" style="text-align:center;padding:30px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
-        <div id="dadi-win-label" style="font-size:2.5rem;font-weight:900;letter-spacing:3px;margin-bottom:10px"></div>
-        <div id="dadi-symbol-out" style="font-size:4rem;font-weight:900;margin-bottom:8px"></div>
+      <div id="dadi-big-result" style="text-align:center;padding:40px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="dadi-win-label" style="font-size:3rem;font-weight:900;letter-spacing:4px;margin-bottom:15px"></div>
+        <div id="dadi-symbol-out" style="font-size:5rem;font-weight:900;margin-bottom:12px"></div>
         <div id="dadi-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8;color:var(--text-dim)"></div>
-        <div id="dadi-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
+        <div id="dadi-fish-change" style="font-size:1.5rem;font-weight:700;margin-top:14px"></div>
       </div>
       <button class="action-btn secondary" onclick="resetDadi()">GIOCA ANCORA</button>
     </div>
@@ -817,52 +817,52 @@
     <button class="modal-close" onclick="closeGame('cavalli')" style="float:right;margin-top:-10px">✕</button>
     <div class="modal-title">🐎 Corsa Cavalli</div>
     <div class="modal-subtitle">PUNTATA MINIMA 10 FISH</div>
-    <div class="bet-section">
-      <label>QUANTE FISH VUOI PUNTARE?</label>
-      <input type="number" class="bet-input" id="bet-cavalli" min="10" placeholder="10" value="10">
-      <div class="bet-quick">
-        <button onclick="setBet('cavalli',10)">10</button>
-        <button onclick="setBet('cavalli',25)">25</button>
-        <button onclick="setBet('cavalli',50)">50</button>
-        <button onclick="setBet('cavalli', Math.floor(fish/2))">½</button>
-        <button onclick="setBet('cavalli', fish)">TUTTO</button>
+    <div id="cavalli-game-content">
+      <div class="bet-section">
+        <label>QUANTE FISH VUOI PUNTARE?</label>
+        <input type="number" class="bet-input" id="bet-cavalli" min="10" placeholder="10" value="10">
+        <div class="bet-quick">
+          <button onclick="setBet('cavalli',10)">10</button>
+          <button onclick="setBet('cavalli',25)">25</button>
+          <button onclick="setBet('cavalli',50)">50</button>
+          <button onclick="setBet('cavalli', Math.floor(fish/2))">½</button>
+          <button onclick="setBet('cavalli', fish)">TUTTO</button>
+        </div>
       </div>
-    </div>
-    <div class="options-grid" style="grid-template-columns:1fr 1fr">
-      <button class="option-btn" onclick="selectCavallo(1)" id="c-1">🐎 CAVALLO 1 <span class="option-mult">×3/×5</span></button>
-      <button class="option-btn" onclick="selectCavallo(2)" id="c-2">🐴 CAVALLO 2 <span class="option-mult">×3/×5</span></button>
-    </div>
-    <button class="option-btn" onclick="selectCavallo(3)" id="c-3" style="width:100%;margin-bottom:10px">🦄 CAVALLO 3 <span class="option-mult">×3/×5</span></button>
-    <div class="options-grid" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
-      <button class="option-btn" onclick="selectVersione(1)" id="cv-1">LUNGA (×5) <span class="option-mult">100 passi</span></button>
-      <button class="option-btn" onclick="selectVersione(2)" id="cv-2">BREVE (×3) <span class="option-mult">30 passi</span></button>
-    </div>
-    <div class="track-container" id="race-track">
-      <div class="horse-lane">
-        <div class="horse-name">Cavallo 1</div>
-        <div class="track"><div class="horse-progress" id="hp1" style="width:0%"><span class="horse-emoji">🐎</span></div></div>
-        <div class="horse-pos" id="pos1">0</div>
+      <div class="options-grid" style="grid-template-columns:1fr 1fr">
+        <button class="option-btn" onclick="selectCavallo(1)" id="c-1">🐎 CAVALLO 1 <span class="option-mult">×3/×5</span></button>
+        <button class="option-btn" onclick="selectCavallo(2)" id="c-2">🐴 CAVALLO 2 <span class="option-mult">×3/×5</span></button>
       </div>
-      <div class="horse-lane">
-        <div class="horse-name">Cavallo 2</div>
-        <div class="track"><div class="horse-progress" id="hp2" style="width:0%"><span class="horse-emoji">🐴</span></div></div>
-        <div class="horse-pos" id="pos2">0</div>
+      <button class="option-btn" onclick="selectCavallo(3)" id="c-3" style="width:100%;margin-bottom:10px">🦄 CAVALLO 3 <span class="option-mult">×3/×5</span></button>
+      <div class="options-grid" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
+        <button class="option-btn" onclick="selectVersione(1)" id="cv-1">LUNGA (×5) <span class="option-mult">100 passi</span></button>
+        <button class="option-btn" onclick="selectVersione(2)" id="cv-2">BREVE (×3) <span class="option-mult">30 passi</span></button>
       </div>
-      <div class="horse-lane">
-        <div class="horse-name">Cavallo 3</div>
-        <div class="track"><div class="horse-progress" id="hp3" style="width:0%"><span class="horse-emoji">🦄</span></div></div>
-        <div class="horse-pos" id="pos3">0</div>
+      <div class="track-container" id="race-track">
+        <div class="horse-lane">
+          <div class="horse-name">Cavallo 1</div>
+          <div class="track"><div class="horse-progress" id="hp1" style="width:0%"><span class="horse-emoji">🐎</span></div></div>
+          <div class="horse-pos" id="pos1">0</div>
+        </div>
+        <div class="horse-lane">
+          <div class="horse-name">Cavallo 2</div>
+          <div class="track"><div class="horse-progress" id="hp2" style="width:0%"><span class="horse-emoji">🐴</span></div></div>
+          <div class="horse-pos" id="pos2">0</div>
+        </div>
+        <div class="horse-lane">
+          <div class="horse-name">Cavallo 3</div>
+          <div class="track"><div class="horse-progress" id="hp3" style="width:0%"><span class="horse-emoji">🦄</span></div></div>
+          <div class="horse-pos" id="pos3">0</div>
+        </div>
       </div>
-    </div>
-    <div id="cavalli-play-area">
       <button class="action-btn" onclick="playCavalli()" id="btn-cavalli">INIZIA LA CORSA</button>
     </div>
     <div id="cavalli-result-area" style="display:none;margin-top:10px">
-      <div id="cavalli-big-result" style="text-align:center;padding:30px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
-        <div id="cavalli-win-label" style="font-size:2.5rem;font-weight:900;letter-spacing:3px;margin-bottom:10px"></div>
-        <div id="cavalli-symbol-out" style="font-size:3rem;font-weight:900;margin-bottom:8px"></div>
+      <div id="cavalli-big-result" style="text-align:center;padding:40px 20px;border-radius:4px;margin-bottom:15px;font-family:'Playfair Display',serif;">
+        <div id="cavalli-win-label" style="font-size:3rem;font-weight:900;letter-spacing:4px;margin-bottom:15px"></div>
+        <div id="cavalli-symbol-out" style="font-size:2.5rem;font-weight:900;margin-bottom:12px;letter-spacing:2px"></div>
         <div id="cavalli-detail" style="font-size:0.9rem;letter-spacing:1px;opacity:0.85;line-height:1.8;color:var(--text-dim)"></div>
-        <div id="cavalli-fish-change" style="font-size:1.4rem;font-weight:700;margin-top:12px"></div>
+        <div id="cavalli-fish-change" style="font-size:1.5rem;font-weight:700;margin-top:14px"></div>
       </div>
       <button class="action-btn secondary" onclick="resetRace()">GIOCA ANCORA</button>
     </div>
@@ -1084,9 +1084,9 @@ function openGame(name) {
     if (el) { el.className = el.className.replace(' active',''); el.textContent = ''; }
   });
   // reset new-style big result areas
-  const playArea = document.getElementById(name + '-play-area');
+  const gameContent = document.getElementById(name + '-game-content');
   const resultArea = document.getElementById(name + '-result-area');
-  if (playArea) playArea.style.display = 'block';
+  if (gameContent) gameContent.style.display = 'block';
   if (resultArea) resultArea.style.display = 'none';
   if (name === 'slot') resetSlot();
   if (name === 'blackjack') resetBJ();
@@ -1130,9 +1130,12 @@ function selectMoneta(choice) {
   document.getElementById('moneta-croce').classList.toggle('selected', choice === 1);
 }
 function resetMoneta() {
-  document.getElementById('moneta-play-area').style.display = 'block';
+  document.getElementById('moneta-game-content').style.display = 'block';
   document.getElementById('moneta-result-area').style.display = 'none';
   document.getElementById('coin-visual').textContent = '🪙';
+  monetaChoice = -1;
+  document.getElementById('moneta-testa').classList.remove('selected');
+  document.getElementById('moneta-croce').classList.remove('selected');
 }
 function playMoneta() {
   if (monetaChoice === -1) { showToast('Scegli testa o croce!'); return; }
@@ -1169,7 +1172,7 @@ function playMoneta() {
       fishChange.style.color = '#ff6b6b';
       if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
     }
-    document.getElementById('moneta-play-area').style.display = 'none';
+    document.getElementById('moneta-game-content').style.display = 'none';
     document.getElementById('moneta-result-area').style.display = 'block';
   }, 900);
 }
@@ -1188,9 +1191,13 @@ function selectDadiNum(n) {
   for (let i = 1; i <= 6; i++) document.getElementById('dn' + i).classList.toggle('selected', i === n);
 }
 function resetDadi() {
-  document.getElementById('dadi-play-area').style.display = 'block';
+  document.getElementById('dadi-game-content').style.display = 'block';
   document.getElementById('dadi-result-area').style.display = 'none';
   document.getElementById('die1').textContent = '⚀';
+  dadiChoice = -1; dadiNumber = -1;
+  for (let i = 0; i <= 4; i++) { const e = document.getElementById('dadi-'+i); if(e) e.classList.remove('selected'); }
+  for (let i = 1; i <= 6; i++) document.getElementById('dn'+i).classList.remove('selected');
+  document.getElementById('dadi-number-pick').style.display = 'none';
 }
 function playDadi() {
   if (dadiChoice === -1) { showToast('Scegli una puntata!'); return; }
@@ -1235,7 +1242,7 @@ function playDadi() {
       fishChange.style.color = '#ff6b6b';
       if (fish < 10) setTimeout(() => document.getElementById('game-over').classList.add('active'), 1800);
     }
-    document.getElementById('dadi-play-area').style.display = 'none';
+    document.getElementById('dadi-game-content').style.display = 'none';
     document.getElementById('dadi-result-area').style.display = 'block';
   }, 700);
 }
@@ -1451,7 +1458,7 @@ function resetRace() {
   [1,2,3].forEach(i => { document.getElementById('hp'+i).style.width='0%'; document.getElementById('pos'+i).textContent='0'; });
   [1,2,3].forEach(i => document.getElementById('c-'+i).classList.remove('selected'));
   [1,2].forEach(i => document.getElementById('cv-'+i).classList.remove('selected'));
-  document.getElementById('cavalli-play-area').style.display = 'block';
+  document.getElementById('cavalli-game-content').style.display = 'block';
   document.getElementById('cavalli-result-area').style.display = 'none';
 }
 function selectCavallo(n) {
@@ -1511,7 +1518,7 @@ function playCavalli() {
         fishChange.textContent = `-${bet} fish  →  Saldo: ${fish} fish`;
         fishChange.style.color = '#ff6b6b';
       }
-      document.getElementById('cavalli-play-area').style.display = 'none';
+      document.getElementById('cavalli-game-content').style.display = 'none';
       document.getElementById('cavalli-result-area').style.display = 'block';
     }
   }, 300);
@@ -1556,6 +1563,10 @@ function renderCard(card, hidden = false) {
 }
 function startBlackjack() {
   if (!validateBet('blackjack')) return;
+  // Nascondi il risultato della partita precedente
+  document.getElementById('result-bj').classList.remove('active');
+  document.getElementById('rh-bj').textContent = '';
+  document.getElementById('rb-bj').innerHTML = '';
   bjMano = getBet('blackjack');
   fish -= bjMano;
   // Aggiorna display senza triggerare game over (la puntata è in gioco, non persa)
